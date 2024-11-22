@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>{% block title %}Project Management{% endblock %}</title>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css"
+		/>
+		<link
+			href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css"
+			rel="stylesheet"
+		/>
+
+		<style>
+			body {
+				padding-top: 60px;
+				background-color: #f5f7fb;
+			}
+			.navbar-brand {
+				font-weight: 600;
+			}
+			.user-info {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+			}
+			.user-avatar {
+				width: 32px;
+				height: 32px;
+				border-radius: 50%;
+				background-color: #e9ecef;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-weight: 600;
+			}
+			/* Sidebar styles */
+			.sidebar {
+				position: fixed;
+				top: 0;
+				left: 0;
+				bottom: 0;
+				width: 280px;
+				background-color: white;
+				color: black;
+				padding-top: 80px;
+				padding-left: 10px;
+				padding-right: 10px;
+				transition: all 0.3s ease;
+				border-right: 1px solid rgba(128, 128, 128, 0.391);
+			}
+			.sidebar .nav-link {
+				color: black;
+				padding-top: 20px;
+				padding-bottom: 20px;
+				border-radius: 14px;
+				margin-bottom: 10px;
+			}
+			.sidebar .nav-link:hover {
+				background-color: #198754;
+				color: white;
+				border-radius: 14px;
+			}
+			.sidebar.collapsed {
+				width: 0px;
+				padding: 0;
+				overflow: hidden;
+			}
+			.sidebar .navbar-brand {
+				font-size: 1.5rem;
+				margin-left: 10px;
+			}
+			.content {
+				margin-left: 280px;
+				transition: margin-left 0.3s ease;
+			}
+			.content.collapsed {
+				margin-left: 80px;
+			}
+			/* .sidebar-toggler {
+				position: absolute;
+				top: 10px;
+				right: -40px;
+				cursor: pointer;
+				color: white;
+			} */
+			.sidebar-toggler i {
+				font-size: 26px;
+			}
+			.custom-nav .container {
+				max-width: 100% !important;
+			}
+			.right-content {
+				max-width: none !important;
+			}
+			.sidebar .nav-link.active {
+				background-color: #198754;
+				color: white;
+				border-radius: 14px;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- Sidebar -->
+		<!-- Sidebar -->
+		<div class="sidebar" id="sidebar">
+			<ul class="nav flex-column">
+				<li class="nav-item">
+					<a
+						class="nav-link {% if request.path == url_for('dashboard') %}active{% endif %}"
+						href="{{ url_for('dashboard') }}"
+					>
+						<i
+							class="bi bi-house-fill"
+							style="margin-right: 10px"
+						></i>
+						Dashboard
+					</a>
+				</li>
+				<li class="nav-item">
+					<a
+						class="nav-link {% if request.path == url_for('users') %}active{% endif %}"
+						href="{{ url_for('users') }}"
+					>
+						<i
+							class="bi bi-person-lines-fill"
+							style="margin-right: 10px"
+						></i>
+						Users
+					</a>
+				</li>
+
+				<li class="nav-item">
+					<a
+						class="nav-link {% if request.path == url_for('new_project') %}active{% endif %}"
+						href="{{ url_for('new_project') }}"
+					>
+						<i
+							class="bi bi-kanban-fill"
+							style="margin-right: 10px"
+						></i>
+						New Project
+					</a>
+				</li>
+				<li class="nav-item">
+					<a
+						class="nav-link {% if request.path == url_for('new_task') %}active{% endif %}"
+						href="{{ url_for('new_task') }}"
+					>
+						<i
+							class="bi bi-list-task"
+							style="margin-right: 10px"
+						></i>
+						New Task
+					</a>
+				</li>
+			</ul>
+		</div>
+
+		<!-- Main Content -->
+		<div class="content" id="content">
+			<!-- Fixed Header -->
+			<nav
+				class="navbar navbar-expand-lg navbar-dark bg-success fixed-top custom-nav"
+			>
+				<div class="container">
+					<div class="sidebar-toggler" id="sidebarToggler">
+						<i
+							class="bi bi-list"
+							style="color: #fff; margin-right: 20px"
+						></i>
+					</div>
+					<a class="navbar-brand" href="{{ url_for('dashboard') }}"
+						>Project Manager</a
+					>
+					{% if session.user_id %}
+					<button
+						class="navbar-toggler"
+						type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#navbarNav"
+					>
+						<span class="navbar-toggler-icon"></span>
+					</button>
+
+					<div class="collapse navbar-collapse" id="navbarNav">
+						<ul class="navbar-nav me-auto">
+							<li class="nav-item">
+								<!-- <a
+									class="nav-link"
+									href="{{ url_for('users') }}"
+									>Users</a
+								> -->
+							</li>
+							<!-- <li class="nav-item">
+								<a
+									class="nav-link"
+									href="{{ url_for('dashboard') }}"
+									>Dashboard</a
+								>
+							</li>
+							<li class="nav-item">
+								<a
+									class="nav-link"
+									href="{{ url_for('new_project') }}"
+									>New Project</a
+								>
+							</li>
+							<li class="nav-item">
+								<a
+									class="nav-link"
+									href="{{ url_for('new_task') }}"
+									>New Task</a
+								>
+							</li> -->
+						</ul>
+						<div class="user-info text-light">
+							<div class="user-avatar">
+								{{ session.user_name[0] }}
+							</div>
+							<div class="d-none d-sm-block">
+								{{ session.user_name }}
+							</div>
+							<a
+								href="{{ url_for('logout') }}"
+								class="btn btn-outline-light btn-sm ms-3"
+								>Logout</a
+							>
+						</div>
+					</div>
+					{% endif %}
+				</div>
+			</nav>
+
+			<div class="container mt-4 right-content">
+				{% block content %}{% endblock %}
+			</div>
+		</div>
+		<div class="toast-container position-fixed bottom-0 end-0 p-3">
+			{% with messages = get_flashed_messages(with_categories=true) %} {%
+			if messages %} {% for category, message in messages %}
+			<div
+				class="toast align-items-center text-bg-{{ category }} border-0"
+				role="alert"
+				aria-live="assertive"
+				aria-atomic="true"
+			>
+				<div class="d-flex">
+					<div class="toast-body">{{ message }}</div>
+					<button
+						type="button"
+						class="btn-close me-2 m-auto"
+						data-bs-dismiss="toast"
+						aria-label="Close"
+					></button>
+				</div>
+			</div>
+			{% endfor %} {% endif %} {% endwith %}
+		</div>
+
+		<script>
+			document.addEventListener("DOMContentLoaded", function () {
+				var toastElements = document.querySelectorAll(".toast");
+				toastElements.forEach(function (toastEl) {
+					var toast = new bootstrap.Toast(toastEl);
+					toast.show();
+				});
+			});
+		</script>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+		<script>
+			const sidebar = document.getElementById("sidebar");
+			const content = document.getElementById("content");
+			const sidebarToggler = document.getElementById("sidebarToggler");
+
+			sidebarToggler.addEventListener("click", function () {
+				sidebar.classList.toggle("collapsed");
+				content.classList.toggle("collapsed");
+			});
+		</script>
+	</body>
+</html>

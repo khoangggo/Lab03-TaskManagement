@@ -1,0 +1,87 @@
+{% extends "base.html" %} {% block title %}{{ 'Edit Task' if is_edit else 'New Task' }}{% endblock %} {% block content %}
+
+		<div class="container mt-4">
+			<div class="row">
+				<div class="col-md-6 offset-md-3">
+					<div class="card">
+						<div class="card-header">
+							<h3>
+								{{ 'Edit Task' if is_edit else 'New Task' }}
+							</h3>
+						</div>
+						<div class="card-body">
+							<form method="POST">
+								<div class="mb-3">
+									<label class="form-label">Task Name</label>
+									<input
+										type="text"
+										name="task_name"
+										class="form-control"
+										value="{{ task.taskname if is_edit else '' }}"
+										required
+									/>
+								</div>
+								<div class="mb-3">
+									<label class="form-label">Project</label>
+									<select
+										name="project_id"
+										class="form-control"
+										required
+									>
+									{% for project in projects %}
+									<option value="{{ project.projectid }}" 
+										{% if is_edit and project.projectid == task.projectid %} selected {% endif %}>
+										{{ project.projectname }}
+									</option>
+									{% endfor %}
+									</select>
+								</div>
+								<div class="mb-3">
+									<label class="form-label"
+										>Assigned To</label
+									>
+									<select
+										name="assigned_to"
+										class="form-control"
+										required
+									>
+									{% for user in users %}
+									<option value="{{ user.userid }}" 
+										{% if is_edit and user.userid == task.assigned_to %} selected {% endif %}>
+										{{ user.name }}
+									</option>
+									{% endfor %}
+									</select>
+								</div>
+								<div class="mb-3">
+									<label class="form-label">Status</label>
+									<select
+										name="status"
+										class="form-control"
+										required
+									>
+										<option value="New">New</option>
+										<option value="In Progress">
+											In Progress
+										</option>
+										<option value="Completed">
+											Completed
+										</option>
+									</select>
+								</div>
+								<button type="submit" class="btn btn-primary">
+									{{ 'Save Changes' if is_edit else 'Create
+									Task' }}
+								</button>
+								<a
+									href="{{ url_for('dashboard') }}"
+									class="btn btn-secondary"
+									>Cancel</a
+								>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+{% endblock %}

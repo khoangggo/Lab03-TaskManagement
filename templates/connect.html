@@ -1,0 +1,58 @@
+<!-- templates/connect.html -->
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Connect to Database</title>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css"
+		/>
+	</head>
+	<body>
+		<div class="container mt-5">
+			<div class="row">
+				<div class="col-md-6 offset-md-3">
+					{% with messages = get_flashed_messages() %} {% if messages
+					%} {% for message in messages %}
+					<div class="alert alert-danger">{{ message }}</div>
+					{% endfor %} {% endif %} {% endwith %}
+
+					<div class="card">
+						<div class="card-header">
+							<h3>Database Connection</h3>
+						</div>
+						<div class="card-body">
+							<form
+								method="POST"
+								action="{{ url_for('connect_db') }}"
+							>
+								<div class="mb-3">
+									<label class="form-label">Username</label>
+									<input
+										value="postgres"
+										type="text"
+										name="username"
+										class="form-control"
+										readonly
+									/>
+								</div>
+								<div class="mb-3">
+									<label class="form-label">Password</label>
+									<input
+										type="password"
+										name="password"
+										class="form-control"
+										required
+									/>
+								</div>
+								<button type="submit" class="btn btn-primary">
+									Connect
+								</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

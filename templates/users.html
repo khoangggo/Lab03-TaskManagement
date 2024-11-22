@@ -1,0 +1,59 @@
+{% extends "base.html" %} {% block title %}Users{% endblock %} {% block content
+%}
+<div class="row mt-4">
+	<div class="col-md-12">
+		<div class="card">
+			<div
+				class="card-header d-flex justify-content-between align-items-center"
+			>
+				<h3>Users</h3>
+				<a
+					href="{{ url_for('new_user') }}"
+					class="btn btn-primary btn-sm"
+					>New User</a
+				>
+			</div>
+			<div class="card-body">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Email</th>
+							<th>Role</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for user in users %}
+						<tr>
+							<td>{{ user.name }}</td>
+							<td>{{ user.email }}</td>
+							<td>{{ user.role }}</td>
+							<td>
+								<a
+									href="{{ url_for('edit_user', user_id=user.userid) }}"
+									class="btn btn-sm btn-primary"
+									>Edit</a
+								>
+								<form
+									action="{{ url_for('delete_user', user_id=user.userid) }}"
+									method="post"
+									style="display: inline"
+								>
+									<button
+										type="submit"
+										class="btn btn-sm btn-danger"
+									>
+										Delete
+									</button>
+								</form>
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
